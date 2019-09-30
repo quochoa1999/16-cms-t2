@@ -12655,7 +12655,7 @@ function (_Component) {
         ,
         autoFocus: isCleanNewPost
         /* eslint-enable jsx-a11y/no-autofocus */
-
+        
       })), isSelected && isPostTypeViewable && Object(external_this_wp_element_["createElement"])(post_permalink, null))));
     }
   }]);

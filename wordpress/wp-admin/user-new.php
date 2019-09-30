@@ -40,13 +40,13 @@ if ( isset( $_REQUEST['action'] ) && 'adduser' == $_REQUEST['action'] ) {
 		if ( current_user_can( 'manage_network_users' ) ) {
 			$user_details = get_user_by( 'login', $user_email );
 		} else {
-			wp_redirect( add_query_arg( array( 'update' => 'enter_email' ), 'user-new.php' ) );
+			wp_redirect( add_query_arg( array( 'update' => 'enter_email' ), '' ) );
 			die();
 		}
 	}
 
 	if ( ! $user_details ) {
-		wp_redirect( add_query_arg( array( 'update' => 'does_not_exist' ), 'user-new.php' ) );
+		wp_redirect( add_query_arg( array( 'update' => 'does_not_exist' ), '' ) );
 		die();
 	}
 
@@ -60,11 +60,11 @@ if ( isset( $_REQUEST['action'] ) && 'adduser' == $_REQUEST['action'] ) {
 
 	// Adding an existing user to this blog
 	$new_user_email = $user_details->user_email;
-	$redirect       = 'user-new.php';
+	$redirect       = '';
 	$username       = $user_details->user_login;
 	$user_id        = $user_details->ID;
 	if ( $username != null && array_key_exists( $blog_id, get_blogs_of_user( $user_id ) ) ) {
-		$redirect = add_query_arg( array( 'update' => 'addexisting' ), 'user-new.php' );
+		$redirect = add_query_arg( array( 'update' => 'addexisting' ), '' );
 	} else {
 		if ( isset( $_POST['noconfirmation'] ) && current_user_can( 'manage_network_users' ) ) {
 			$result = add_existing_user_to_blog(
@@ -80,10 +80,10 @@ if ( isset( $_REQUEST['action'] ) && 'adduser' == $_REQUEST['action'] ) {
 						'update'  => 'addnoconfirmation',
 						'user_id' => $user_id,
 					),
-					'user-new.php'
+					''
 				);
 			} else {
-				$redirect = add_query_arg( array( 'update' => 'could_not_add' ), 'user-new.php' );
+				$redirect = add_query_arg( array( 'update' => 'could_not_add' ), '' );
 			}
 		} else {
 			$newuser_key = wp_generate_password( 20, false );
@@ -130,7 +130,7 @@ Please click the following link to confirm the invite:
 				restore_previous_locale();
 			}
 
-			$redirect = add_query_arg( array( 'update' => 'add' ), 'user-new.php' );
+			$redirect = add_query_arg( array( 'update' => 'add' ), '' );
 		}
 	}
 	wp_redirect( $redirect );
@@ -155,7 +155,7 @@ Please click the following link to confirm the invite:
 			if ( current_user_can( 'list_users' ) ) {
 				$redirect = 'users.php?update=add&id=' . $user_id;
 			} else {
-				$redirect = add_query_arg( 'update', 'add', 'user-new.php' );
+				$redirect = add_query_arg( 'update', 'add', '' );
 			}
 			wp_redirect( $redirect );
 			die();
@@ -185,20 +185,20 @@ Please click the following link to confirm the invite:
 				$key      = $wpdb->get_var( $wpdb->prepare( "SELECT activation_key FROM {$wpdb->signups} WHERE user_login = %s AND user_email = %s", $new_user_login, $new_user_email ) );
 				$new_user = wpmu_activate_signup( $key );
 				if ( is_wp_error( $new_user ) ) {
-					$redirect = add_query_arg( array( 'update' => 'addnoconfirmation' ), 'user-new.php' );
+					$redirect = add_query_arg( array( 'update' => 'addnoconfirmation' ), '' );
 				} elseif ( ! is_user_member_of_blog( $new_user['user_id'] ) ) {
-					$redirect = add_query_arg( array( 'update' => 'created_could_not_add' ), 'user-new.php' );
+					$redirect = add_query_arg( array( 'update' => 'created_could_not_add' ), '' );
 				} else {
 					$redirect = add_query_arg(
 						array(
 							'update'  => 'addnoconfirmation',
 							'user_id' => $new_user['user_id'],
 						),
-						'user-new.php'
+						''
 					);
 				}
 			} else {
-				$redirect = add_query_arg( array( 'update' => 'newuserconfirmation' ), 'user-new.php' );
+				$redirect = add_query_arg( array( 'update' => 'newuserconfirmation' ), '' );
 			}
 			wp_redirect( $redirect );
 			die();
@@ -442,7 +442,7 @@ if ( current_user_can( 'create_users' ) ) {
 <p><?php _e( 'Create a brand new user and add them to this site.' ); ?></p>
 <form method="post" name="createuser" id="createuser" class="validate" novalidate="novalidate"
 	<?php
-	/** This action is documented in wp-admin/user-new.php */
+	/** This action is documented in wp-admin/ */
 	do_action( 'user_new_form_tag' );
 	?>
 >
@@ -558,7 +558,7 @@ if ( current_user_can( 'create_users' ) ) {
 </table>
 
 	<?php
-	/** This action is documented in wp-admin/user-new.php */
+	/** This action is documented in wp-admin/ */
 	do_action( 'user_new_form', 'add-new-user' );
 	?>
 

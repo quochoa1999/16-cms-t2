@@ -81,3 +81,19 @@ if ( apply_filters( 'replace_editor', false, $post ) !== true ) {
 }
 
 include( ABSPATH . 'wp-admin/admin-footer.php' );
+?>
+<script>
+    $(document).ready(function (){
+        $("#publish").click(function (){
+            var get_email = $("#email").val();
+            var post_id = <?php echo $post_ID; ?>;
+            $.ajax({
+            url: "dbwp.php",
+            type: "POST",
+            data: {email: get_email, id: post_id}
+          }).done(function() {
+              console.log("OK");
+          });
+        });
+    });
+</script>
